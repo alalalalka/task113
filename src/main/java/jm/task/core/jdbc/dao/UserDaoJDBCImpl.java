@@ -22,93 +22,74 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        Connection connection = Util.getConnection();
 
-        try {
-            Statement statement = connection.createStatement();
+
+        try (Connection connection = Util.getConnection();
+             Statement statement = connection.createStatement();){
+
             statement.executeUpdate(createUT + "(id int (10) AUTO_INCREMENT,\n" +
                     "name varchar(20) NOT NULL,\n" +
                     "lastname varchar(50) NOT NULL,\n" +
                     "age int NOT NULL,\n" +
                     "PRIMARY KEY (id))");
 
-
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                e.printStackTrace();
-            }
-
         }
 
     }
 
     public void dropUsersTable() {
-        Connection connection = Util.getConnection();
-        try {
-            Statement statement = connection.createStatement();
+
+        try (Connection connection = Util.getConnection();
+             Statement statement = connection.createStatement()){
+
             statement.executeUpdate(dropUT);
 
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                e.printStackTrace();
-            }
-
         }
 
 
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        Connection connection = Util.getConnection();
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(saveU);
+        try (Connection connection = Util.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(saveU)){
+
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
+
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                e.printStackTrace();
-            }
-
         }
 
     }
 
     public void removeUserById(long id) {
-        Connection connection = Util.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(removeU);
+
+        try (Connection connection = Util.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(removeU)){
+
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                e.printStackTrace();
-            }
-
         }
 
     }
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        Connection connection = Util.getConnection();
-        try {
-            ResultSet resultSet = connection.createStatement().executeQuery(getAU);
+
+        try (Connection connection = Util.getConnection();
+             ResultSet resultSet = connection.createStatement().executeQuery(getAU)){
+
             while (resultSet.next()){
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -118,32 +99,22 @@ public class UserDaoJDBCImpl implements UserDao {
                 users.add(user);
             }
             System.out.println(users);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                e.printStackTrace();
-            }
-
         }
         return users;
     }
 
     public void cleanUsersTable() {
-        Connection connection = Util.getConnection();
-        try {
 
-            Statement statement = connection.createStatement();
+        try (Connection connection = Util.getConnection();
+             Statement statement = connection.createStatement()){
+
             statement.executeUpdate(cleanUT);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                e.printStackTrace();
-            }
-
         }
 
 

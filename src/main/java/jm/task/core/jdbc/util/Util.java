@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 
 public class Util {
-    private static String dbUrl = "jdbc:mysql://localhost:3306/test?useSSL=false&allowMultiQueries=true&serverTimezone=UTC";
+    private static String dbUrl = "jdbc:mysql://localhost:3306/test?allowPublicKeyRetrieval=true&useSSL=false";
     private static String dbUserName = "root";
     private static String dbPassword = "root";
 
